@@ -1,5 +1,5 @@
 ﻿using CsvHelper.Configuration;
-using CsvHelper.TypeConversion;
+using DataImport.Converters;
 using DataImport.Entities;
 
 namespace DataImport.Maps
