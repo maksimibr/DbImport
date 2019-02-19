@@ -1,4 +1,5 @@
 ﻿using System;
+using DataImport.Entities.Enums;
 
 namespace DataImport.Entities
 {
@@ -16,7 +17,7 @@ namespace DataImport.Entities
 
         public DateTime UpdateDateUtc { get; set; }
 
-        public int Status { get; set; }
+        public Status Status { get; set; }
 
         public Guid? DeviceId { get; set; }
 

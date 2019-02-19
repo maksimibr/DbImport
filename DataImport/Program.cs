@@ -21,13 +21,13 @@ namespace DataImport
 
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-            Task.Run(async () =>
-            {
-                //await InsertDataAsync(connectionString, shipments).ConfigureAwait(true);
-                //await InsertDataAsync(connectionString, pallets).ConfigureAwait(true);
-                //await InsertDataAsync(connectionString, batches).ConfigureAwait(true);
-                //await InsertDataAsync(connectionString, bottles).ConfigureAwait(true);
-            }).Wait();
+            //Task.Run(async () =>
+            //{
+            //    await InsertDataAsync(connectionString, shipments).ConfigureAwait(true);
+            //    await InsertDataAsync(connectionString, pallets).ConfigureAwait(true);
+            //    await InsertDataAsync(connectionString, batches).ConfigureAwait(true);
+            //    await InsertDataAsync(connectionString, bottles).ConfigureAwait(true);
+            //}).Wait();
 
             Console.ReadKey();
         }

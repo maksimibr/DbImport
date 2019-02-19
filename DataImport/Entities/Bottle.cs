@@ -1,4 +1,5 @@
 ﻿using System;
+using DataImport.Entities.Enums;
 
 namespace DataImport.Entities
 {
@@ -12,7 +13,7 @@ namespace DataImport.Entities
 
         internal string ExciseDutyNumber2 { get; set; }
 
-        internal int Status { get; set; }
+        internal Status Status { get; set; }
 
         internal DateTime CreateDateUtc { get; set; }
 

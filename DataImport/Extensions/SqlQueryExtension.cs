@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DataImport.Entities;
+using DataImport.Entities.Enums;
 
 namespace DataImport.Extensions
 {
@@ -15,7 +16,7 @@ namespace DataImport.Extensions
         private static string GetValue(this DateTime input) => $"'{input.ToString("o").RemoveLast()}'";
         private static string GetValue(this int? input) => !input.HasValue ? "NULL" : input.Value.ToString();
         private static string GetValue(this bool input) => input.ToString();
-        private static string GetValue(this int input) => input.ToString();
+        private static string GetValue(this Status input) => ((int)input).ToString();
 
 
         internal static string CreateSqlQuery(this IEnumerable<Shipment> shipments)
