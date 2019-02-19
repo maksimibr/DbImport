@@ -2,32 +2,32 @@
 
 namespace DataImport.Entities
 {
-    internal class Shipment
+    public class Shipment
     {
-        internal Guid Id { get; set; }
+        public Guid Id { get; set; }
 
-        internal string Identifier { get; set; }
+        public string Identifier { get; set; }
 
-        internal string Name { get; set; }
+        public string Name { get; set; }
 
-        internal string DocumentNumber { get; set; }
+        public string DocumentNumber { get; set; }
 
-        internal string RequestNumber { get; set; }
+        public string RequestNumber { get; set; }
 
-        internal string DriverName { get; set; }
+        public string DriverName { get; set; }
 
-        internal string Comment { get; set; }
+        public string Comment { get; set; }
 
-        internal Guid? DeviceId { get; set; }
+        public Guid? DeviceId { get; set; }
 
-        internal DateTime CreateDateUtc { get; set; }
+        public DateTime CreateDateUtc { get; set; }
 
-        internal DateTime UpdateDateUtc { get; set; }
+        public DateTime UpdateDateUtc { get; set; }
 
-        internal Guid CompanyId { get; set; }
+        public Guid CompanyId { get; set; }
 
-        internal Guid? RecipientCompanyId { get; set; }
+        public Guid? RecipientCompanyId { get; set; }
 
-        internal Guid StorageId { get; set; }
+        public Guid StorageId { get; set; }
     }
 }

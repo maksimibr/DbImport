@@ -8,8 +8,6 @@ namespace DataImport.Extensions
 {
     internal static class SqlQueryExtension
     {
-        private static string RemoveLast(this string text) => text.Length < 1 ? text : text.Remove(text.Length - 1);
-
         private static string GetValue(this string input) => string.IsNullOrEmpty(input) ? "NULL" : $"'{input}'";
         private static string GetValue(this Guid? input) => !input.HasValue ? "NULL" : $"'{input.Value}'";
         private static string GetValue(this Guid input) => $"'{input}'";

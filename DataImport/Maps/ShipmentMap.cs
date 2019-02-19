@@ -1,4 +1,5 @@
 ﻿using CsvHelper.Configuration;
+using CsvHelper.TypeConversion;
 using DataImport.Entities;
 
 namespace DataImport.Maps
@@ -14,11 +15,11 @@ namespace DataImport.Maps
             Map(x => x.RequestNumber).Name("request_number");
             Map(x => x.DriverName).Name("driver_name");
             Map(x => x.Comment).Name("comment");
-            Map(x => x.CreateDateUtc).Name("created_at");
-            Map(x => x.UpdateDateUtc).Name("updated_at");
             Map(x => x.CompanyId).Name("company_id");
             Map(x => x.RecipientCompanyId).Name("consignee_company_id");
             Map(x => x.StorageId).Name("storage_id");
+            Map(x => x.CreateDateUtc).TypeConverter<DateTimeConverter>().Name("created_at");
+            Map(x => x.UpdateDateUtc).TypeConverter<DateTimeConverter>().Name("updated_at");
         }
 
         /*

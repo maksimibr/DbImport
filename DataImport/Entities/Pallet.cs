@@ -3,9 +3,9 @@ using DataImport.Entities.Enums;
 
 namespace DataImport.Entities
 {
-    internal class Pallet
+    public class Pallet
     {
-        internal Guid Id { get; set; }
+        public Guid Id { get; set; }
 
         public string Identifier { get; set; }
 

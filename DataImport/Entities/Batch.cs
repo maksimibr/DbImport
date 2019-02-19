@@ -3,42 +3,42 @@ using DataImport.Entities.Enums;
 
 namespace DataImport.Entities
 {
-    internal class Batch
+    public class Batch
     {
-        internal Guid Id { get; set; }
+        public Guid Id { get; set; }
 
-        internal string Identifier { get; set; }
+        public string Identifier { get; set; }
 
-        internal string Name { get; set; }
+        public string Name { get; set; }
 
-        internal string Comment { get; set; }
+        public string Comment { get; set; }
 
-        internal Status Status { get; set; }
+        public Status Status { get; set; }
 
-        internal DateTime CreateDateUtc { get; set; }
+        public DateTime CreateDateUtc { get; set; }
 
-        internal DateTime UpdateDateUtc { get; set; }
+        public DateTime UpdateDateUtc { get; set; }
 
-        internal bool IsEmpty { get; set; }
+        public bool IsEmpty { get; set; }
 
-        internal string PalletIdentifier { get; set; }
+        public string PalletIdentifier { get; set; }
 
-        internal string PartNumber { get; set; }
+        public string PartNumber { get; set; }
 
-        internal Guid CompanyId { get; set; }
+        public Guid CompanyId { get; set; }
 
-        internal Guid? DeviceId { get; set; }
+        public Guid? DeviceId { get; set; }
 
-        internal Guid? RecipientCompanyId { get; set; }
+        public Guid? RecipientCompanyId { get; set; }
 
-        internal Guid? ShipmentId { get; set; }
+        public Guid? ShipmentId { get; set; }
 
-        internal Guid? ProductId { get; set; }
+        public Guid? ProductId { get; set; }
 
-        internal Guid? ProductionLineId { get; set; }
+        public Guid? ProductionLineId { get; set; }
 
-        internal Guid? StorageId { get; set; }
+        public Guid? StorageId { get; set; }
 
-        internal int? WorkplaceId { get; set; }
+        public int? WorkplaceId { get; set; }
     }
 }

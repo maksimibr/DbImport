@@ -3,32 +3,32 @@ using DataImport.Entities.Enums;
 
 namespace DataImport.Entities
 {
-    internal class Bottle
+    public class Bottle
     {
-        internal Guid Id { get; set; }
+        public Guid Id { get; set; }
 
-        internal string Identifier { get; set; }
+        public string Identifier { get; set; }
 
-        internal string ExciseDutyNumber { get; set; }
+        public string ExciseDutyNumber { get; set; }
 
-        internal string ExciseDutyNumber2 { get; set; }
+        public string ExciseDutyNumber2 { get; set; }
 
-        internal Status Status { get; set; }
+        public Status Status { get; set; }
 
-        internal DateTime CreateDateUtc { get; set; }
+        public DateTime CreateDateUtc { get; set; }
 
-        internal DateTime UpdateDateUtc { get; set; }
+        public DateTime UpdateDateUtc { get; set; }
 
-        internal Guid CompanyId { get; set; }
+        public Guid CompanyId { get; set; }
 
-        internal Guid? RecipientCompanyId { get; set; }
+        public Guid? RecipientCompanyId { get; set; }
 
-        internal string BatchIdentifier { get; set; }
+        public string BatchIdentifier { get; set; }
 
-        internal Guid? ProductionLineId { get; set; }
+        public Guid? ProductionLineId { get; set; }
 
-        internal Guid? BatchId { get; set; }
+        public Guid? BatchId { get; set; }
 
-        internal Guid? ProductId { get; set; }
+        public Guid? ProductId { get; set; }
     }
 }
