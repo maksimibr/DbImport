@@ -7,15 +7,28 @@ namespace DataImport
 {
     internal static class CsvRecordsReader
     {
-        internal static IEnumerable<T> Read<T, TMap>(string path) where TMap : ClassMap
+        internal static IEnumerable<ICollection<T>> Read<T, TMap>(string path, int segmentSize = 100)
+            where TMap : ClassMap
         {
+            var segment = new List<T>();
             using (var reader = new StreamReader(path))
             using (var csv = new CsvReader(reader))
             {
                 csv.Configuration.RegisterClassMap<TMap>();
-                var records = csv.GetRecords<T>();
+                using (var recordsEnumerator = csv.GetRecords<T>().GetEnumerator())
+                {
+                    while (recordsEnumerator.MoveNext())
+                    {
+                        segment.Add(recordsEnumerator.Current);
+                        if (segment.Count == segmentSize)
+                        {
+                            yield return segment;
+                            segment.Clear();
+                        }
+                    }
 
-                return records;
+                    yield return segment;
+                }
             }
         }
     }

@@ -16,7 +16,7 @@ namespace DataImport
             ConnectionString = connectionString;
         }
 
-        internal async Task InsertAsync<T>(IEnumerable<T> data)
+        internal async Task InsertAsync<T>(ICollection<T> data)
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
@@ -40,7 +40,11 @@ namespace DataImport
                         case Type shipmentType when shipmentType == typeof(Shipment):
                             sql = ((IEnumerable<Shipment>)data).CreateSqlQuery();
                             break;
+
                     }
+
+                    Console.WriteLine(sql);
+                    Console.WriteLine("\n*----------------------------------------------*\n");
 
                     var command = new SqlCommand(sql, connection, transaction);
                     await command.ExecuteNonQueryAsync().ConfigureAwait(false);

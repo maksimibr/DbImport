@@ -8,13 +8,13 @@ namespace DataImport.Extensions
 {
     internal static class SqlQueryExtension
     {
-        private static string GetValue(this string input) => string.IsNullOrEmpty(input) ? "NULL" : $"'{input}'";
         private static string GetValue(this Guid? input) => !input.HasValue ? "NULL" : $"'{input.Value}'";
         private static string GetValue(this Guid input) => $"'{input}'";
         private static string GetValue(this DateTime input) => $"'{input.ToString("o").RemoveLast()}'";
         private static string GetValue(this int? input) => !input.HasValue ? "NULL" : input.Value.ToString();
         private static string GetValue(this bool input) => input.ToString();
         private static string GetValue(this Status input) => ((int)input).ToString();
+        private static string GetValue(this string input) => string.IsNullOrEmpty(input) ? "NULL" : $"N'{input}'";
 
 
         internal static string CreateSqlQuery(this IEnumerable<Shipment> shipments)
