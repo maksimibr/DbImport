@@ -43,11 +43,9 @@ namespace DataImport
 
                     }
 
-                    Console.WriteLine(sql);
-                    Console.WriteLine("\n*----------------------------------------------*\n");
-
                     var command = new SqlCommand(sql, connection, transaction);
-                    await command.ExecuteNonQueryAsync().ConfigureAwait(false);
+                    var count = await command.ExecuteNonQueryAsync().ConfigureAwait(false);
+                    Console.WriteLine($"{count}/{data.Count} rows affected");
 
                     transaction.Commit();
                 }

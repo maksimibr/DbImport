@@ -12,7 +12,7 @@ namespace DataImport.Extensions
         private static string GetValue(this Guid input) => $"'{input}'";
         private static string GetValue(this DateTime input) => $"'{input.ToString("o").RemoveLast()}'";
         private static string GetValue(this int? input) => !input.HasValue ? "NULL" : input.Value.ToString();
-        private static string GetValue(this bool input) => input.ToString();
+        private static string GetValue(this bool input) => input ? "1" : "0";
         private static string GetValue(this Status input) => ((int)input).ToString();
         private static string GetValue(this string input) => string.IsNullOrEmpty(input) ? "NULL" : $"N'{input}'";
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using CsvHelper;
 using CsvHelper.Configuration;
 
@@ -27,7 +28,10 @@ namespace DataImport
                         }
                     }
 
-                    yield return segment;
+                    if (segment.Any())
+                    {
+                        yield return segment;
+                    }
                 }
             }
         }

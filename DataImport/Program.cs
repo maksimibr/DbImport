@@ -38,9 +38,11 @@ namespace DataImport
             var shipmentCsvPath = Path.Combine(currentFolder, "shipments.csv");
             if (File.Exists(shipmentCsvPath))
             {
-                var shipmentRecords = CsvRecordsReader.Read<Shipment, ShipmentMap>(shipmentCsvPath, 2);
+                var shipmentRecords = CsvRecordsReader.Read<Shipment, ShipmentMap>(shipmentCsvPath);
                 using (var shipmentEnumerator = shipmentRecords.GetEnumerator())
                 {
+                    Console.WriteLine("\n#-----------------#\n");
+                    Console.WriteLine("Shipments..");
                     while (shipmentEnumerator.MoveNext())
                     {
                         var segment = shipmentEnumerator.Current;
@@ -52,6 +54,27 @@ namespace DataImport
             else
             {
                 Console.WriteLine($"file 'shipments.csv' not found! Path: {shipmentCsvPath}");
+            }
+
+            var palletCsvPath = Path.Combine(currentFolder, "pallets.csv");
+            if (File.Exists(palletCsvPath))
+            {
+                var palletRecords = CsvRecordsReader.Read<Pallet, PalletMap>(palletCsvPath);
+                using (var palletEnumerator = palletRecords.GetEnumerator())
+                {
+                    Console.WriteLine("\n#-----------------#\n");
+                    Console.WriteLine("Palets..");
+                    while (palletEnumerator.MoveNext())
+                    {
+                        var segment = palletEnumerator.Current;
+                        Task.Run(async () =>
+                            await dataWriter.InsertAsync(segment).ConfigureAwait(true)).Wait();
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine($"file 'pallets.csv' not found! Path: {palletCsvPath}");
             }
 
             Console.ReadKey();
