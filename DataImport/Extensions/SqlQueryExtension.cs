@@ -55,14 +55,16 @@ namespace DataImport.Extensions
 
         internal static string CreateSqlQuery(this IEnumerable<Bottle> bottles)
         {
-            var sql = bottles.Aggregate(
-                              "INSERT INTO Shipments(Id, Identifier, ExciseDutyNumber, ExciseDutyNumber2, Status, CreateDateUtc, UpdateDateUtc, CompanyId, RecipientCompanyId, BatchIdentifier, ProductionLineId, BatchId, ProductId) VALUES",
+            var sqlInsert = bottles.Aggregate(
+                              "INSERT INTO Bottles(Id, Identifier, ExciseDutyNumber, ExciseDutyNumber2, Status, CreateDateUtc, UpdateDateUtc, CompanyId, RecipientCompanyId, BatchIdentifier, ProductionLineId, BatchId, ProductId) VALUES",
                               (current, bottle) =>
                                   current +
-                                  $"({bottle.Id.GetValue()}, {bottle.Identifier.GetValue()}, , {bottle.ExciseDutyNumber.GetValue()}, {bottle.ExciseDutyNumber2.GetValue()}, {bottle.Status.GetValue()}, {bottle.CreateDateUtc.GetValue()}, {bottle.UpdateDateUtc.GetValue()}, {bottle.CompanyId.GetValue()}, {bottle.RecipientCompanyId.GetValue()}, {bottle.BatchIdentifier.GetValue()}, {bottle.ProductionLineId.GetValue()}, {bottle.BatchId.GetValue()}, {bottle.ProductId.GetValue()}),")
+                                  $"({bottle.Id.GetValue()}, {bottle.Identifier.GetValue()}, {bottle.ExciseDutyNumber.GetValue()}, {bottle.ExciseDutyNumber2.GetValue()}, {bottle.Status.GetValue()}, {bottle.CreateDateUtc.GetValue()}, {bottle.UpdateDateUtc.GetValue()}, {bottle.CompanyId.GetValue()}, {bottle.RecipientCompanyId.GetValue()}, {bottle.BatchIdentifier.GetValue()}, {bottle.ProductionLineId.GetValue()}, {bottle.BatchId.GetValue()}, {bottle.ProductId.GetValue()}),")
                           .RemoveLast() + ";";
 
-            return sql;
+            const string sqlUpdate = "UPDATE Bottles SET BatchIdentifier = (SELECT TOP 1 Identifier FROM Batches WHERE Bottles.BatchId=Batches.Id);";
+
+            return sqlInsert + sqlUpdate;
         }
     }
 }

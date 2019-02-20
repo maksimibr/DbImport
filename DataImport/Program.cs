@@ -41,8 +41,9 @@ namespace DataImport
                 var shipmentRecords = CsvRecordsReader.Read<Shipment, ShipmentMap>(shipmentCsvPath);
                 using (var shipmentEnumerator = shipmentRecords.GetEnumerator())
                 {
-                    Console.WriteLine("\n#-----------------#\n");
+                    Console.WriteLine("\n#-----------------#");
                     Console.WriteLine("Shipments..");
+                    Console.WriteLine("#-----------------#\n");
                     while (shipmentEnumerator.MoveNext())
                     {
                         var segment = shipmentEnumerator.Current;
@@ -62,8 +63,10 @@ namespace DataImport
                 var palletRecords = CsvRecordsReader.Read<Pallet, PalletMap>(palletCsvPath);
                 using (var palletEnumerator = palletRecords.GetEnumerator())
                 {
-                    Console.WriteLine("\n#-----------------#\n");
+                    Console.WriteLine("\n#-----------------#");
                     Console.WriteLine("Palets..");
+                    Console.WriteLine("#-----------------#\n");
+
                     while (palletEnumerator.MoveNext())
                     {
                         var segment = palletEnumerator.Current;
@@ -75,6 +78,30 @@ namespace DataImport
             else
             {
                 Console.WriteLine($"file 'pallets.csv' not found! Path: {palletCsvPath}");
+            }
+
+            /* ToDo Insert batches here */
+
+            var bottleCsvPath = Path.Combine(currentFolder, "bottles.csv");
+            if (File.Exists(bottleCsvPath))
+            {
+                var bottlesRecords = CsvRecordsReader.Read<Bottle, BottleMap>(bottleCsvPath);
+                using (var bottleEnumerator = bottlesRecords.GetEnumerator())
+                {
+                    Console.WriteLine("\n#-----------------#");
+                    Console.WriteLine("Bottles..");
+                    Console.WriteLine("#-----------------#\n");
+                    while (bottleEnumerator.MoveNext())
+                    {
+                        var segment = bottleEnumerator.Current;
+                        Task.Run(async () =>
+                            await dataWriter.InsertAsync(segment).ConfigureAwait(true)).Wait();
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine($"file bottles.csv' not found! Path: {bottleCsvPath}");
             }
 
             Console.ReadKey();

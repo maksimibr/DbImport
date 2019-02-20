@@ -40,12 +40,12 @@ namespace DataImport
                         case Type shipmentType when shipmentType == typeof(Shipment):
                             sql = ((IEnumerable<Shipment>)data).CreateSqlQuery();
                             break;
-
                     }
 
+                    Console.WriteLine($"{sql}\n");
+
                     var command = new SqlCommand(sql, connection, transaction);
-                    var count = await command.ExecuteNonQueryAsync().ConfigureAwait(false);
-                    Console.WriteLine($"{count}/{data.Count} rows affected");
+                    await command.ExecuteNonQueryAsync().ConfigureAwait(false);
 
                     transaction.Commit();
                 }
