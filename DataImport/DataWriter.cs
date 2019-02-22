@@ -54,8 +54,8 @@ namespace DataImport
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
                     transaction.Rollback();
+                    Console.WriteLine(e.Message);
                 }
             }
         }
