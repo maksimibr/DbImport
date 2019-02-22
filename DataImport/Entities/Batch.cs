@@ -31,7 +31,7 @@ namespace DataImport.Entities
 
         public Guid? RecipientCompanyId { get; set; }
 
-        public Guid? ShipmentId { get; set; }
+        public string ShipmentIdentifier { get; set; }
 
         public Guid? ProductId { get; set; }
 

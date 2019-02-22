@@ -21,15 +21,15 @@ namespace DataImport.Maps
             Map(x => x.ProductionLineId).Name("production_line_id");
             Map(x => x.StorageId).Name("storage_id");
             Map(x => x.WorkplaceId).Name("device_workplace_id");
+            Map(x => x.ShipmentIdentifier).Name("shipment_identifier");
             Map(x => x.Status).TypeConverter<StatusConverter>().Name("status");
             Map(x => x.CreateDateUtc).TypeConverter<DateTimeConverter>().Name("created_at");
             Map(x => x.UpdateDateUtc).TypeConverter<DateTimeConverter>().Name("updated_at");
-            //ToDo Map(x => x.ShipmentId).Name("");
         }
 
         /*
         ToDo Differences:
-        - local: IsEmpty
+        - local: IsEmpty, ShipmentId
         - cloud: inserted_at, modified_at, shipment_identifier, employee_id, product_name, bottles_size, alc_code
         */
     }

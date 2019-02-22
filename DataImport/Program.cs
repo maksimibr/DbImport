@@ -23,6 +23,7 @@ namespace DataImport
             if (string.IsNullOrEmpty(connectionString))
             {
                 Console.WriteLine("connectionString cannot be empty!");
+                Console.ReadKey();
                 return;
             }
 
@@ -30,6 +31,7 @@ namespace DataImport
             if (string.IsNullOrEmpty(currentFolder))
             {
                 Console.WriteLine("Error! Could not get current path");
+                Console.ReadKey();
                 return;
             }
 
@@ -55,6 +57,8 @@ namespace DataImport
             else
             {
                 Console.WriteLine($"file 'shipments.csv' not found! Path: {shipmentCsvPath}");
+                Console.ReadKey();
+                return;
             }
 
             var palletCsvPath = Path.Combine(currentFolder, "pallets.csv");
@@ -78,9 +82,33 @@ namespace DataImport
             else
             {
                 Console.WriteLine($"file 'pallets.csv' not found! Path: {palletCsvPath}");
+                Console.ReadKey();
+                return;
             }
 
-            /* ToDo Insert batches here */
+            var batchCsvPath = Path.Combine(currentFolder, "batches.csv");
+            if (File.Exists(batchCsvPath))
+            {
+                var batchRecords = CsvRecordsReader.Read<Batch, BatchMap>(batchCsvPath);
+                using (var batchEnumerator = batchRecords.GetEnumerator())
+                {
+                    Console.WriteLine("\n#-----------------#");
+                    Console.WriteLine("Batches..");
+                    Console.WriteLine("#-----------------#\n");
+
+                    while (batchEnumerator.MoveNext())
+                    {
+                        var segment = batchEnumerator.Current;
+                        Task.Run(async () => await dataWriter.InsertAsync(segment).ConfigureAwait(true)).Wait();
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine($"file 'batches.csv' not found! Path: {batchCsvPath}");
+                Console.ReadKey();
+                return;
+            }
 
             var bottleCsvPath = Path.Combine(currentFolder, "bottles.csv");
             if (File.Exists(bottleCsvPath))
@@ -102,8 +130,11 @@ namespace DataImport
             else
             {
                 Console.WriteLine($"file bottles.csv' not found! Path: {bottleCsvPath}");
+                Console.ReadKey();
+                return;
             }
 
+            Console.WriteLine("Ok");
             Console.ReadKey();
         }
     }

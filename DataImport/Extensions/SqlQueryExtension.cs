@@ -44,10 +44,10 @@ namespace DataImport.Extensions
         internal static string CreateSqlQuery(this IEnumerable<Batch> batches)
         {
             var sql = batches.Aggregate(
-                              "INSERT INTO Batches(Id, Identifier, Name, Comment, Status, CreateDateUtc, UpdateDateUtc, IsEmpty, PalletIdentifier, PartNumber, CompanyId, DeviceId, RecipientCompanyId, ShipmentId, ProductId, ProductionLineId, StorageId, WorkplaceId) VALUES",
+                              "INSERT INTO TmpBatches(Id, Identifier, Name, Comment, Status, CreateDateUtc, UpdateDateUtc, IsEmpty, PalletIdentifier, PartNumber, CompanyId, DeviceId, RecipientCompanyId, ShipmentIdentifier, ProductId, ProductionLineId, StorageId, WorkplaceId) VALUES",
                               (current, batch) =>
                                   current +
-                                  $"({batch.Id.GetValue()}, {batch.Identifier.GetValue()}, {batch.Name.GetValue()}, {batch.Comment.GetValue()}, {batch.Status.GetValue()}, {batch.CreateDateUtc.GetValue()}, {batch.UpdateDateUtc.GetValue()}, {batch.IsEmpty.GetValue()}, {batch.PalletIdentifier.GetValue()}, {batch.PartNumber.GetValue()}, {batch.CompanyId.GetValue()}, {batch.DeviceId.GetValue()}, {batch.RecipientCompanyId.GetValue()}, {batch.ShipmentId.GetValue()}, {batch.ProductId.GetValue()}, {batch.ProductionLineId.GetValue()}, {batch.StorageId.GetValue()}, {batch.WorkplaceId.GetValue()}),")
+                                  $"({batch.Id.GetValue()}, {batch.Identifier.GetValue()}, {batch.Name.GetValue()}, {batch.Comment.GetValue()}, {batch.Status.GetValue()}, {batch.CreateDateUtc.GetValue()}, {batch.UpdateDateUtc.GetValue()}, {batch.IsEmpty.GetValue()}, {batch.PalletIdentifier.GetValue()}, {batch.PartNumber.GetValue()}, {batch.CompanyId.GetValue()}, {batch.DeviceId.GetValue()}, {batch.RecipientCompanyId.GetValue()}, {batch.ShipmentIdentifier.GetValue()}, {batch.ProductId.GetValue()}, {batch.ProductionLineId.GetValue()}, {batch.StorageId.GetValue()}, {batch.WorkplaceId.GetValue()}),")
                           .RemoveLast() + ";";
 
             return sql;
@@ -65,6 +65,55 @@ namespace DataImport.Extensions
             const string sqlUpdate = "UPDATE Bottles SET BatchIdentifier = (SELECT TOP 1 Identifier FROM Batches WHERE Bottles.BatchId=Batches.Id);";
 
             return sqlInsert + sqlUpdate;
+        }
+
+        internal static string AffectOnTmpBatchTableSqlQuery(this TmpBatchTableAction action)
+        {
+            switch (action)
+            {
+                case TmpBatchTableAction.Create:
+                    {
+                        const string createSqlQuery = "CREATE TABLE TmpBatches(" +
+                                                      "[Id] [uniqueidentifier] NOT NULL," +
+                                                      "[Comment][nvarchar](max) NULL," +
+                                                      "[CompanyId] [uniqueidentifier] NOT NULL," +
+                                                      "[CreateDateUtc] [datetime2] (7) NOT NULL," +
+                                                      "[DeviceId] [uniqueidentifier] NULL," +
+                                                      "[Identifier] [nvarchar] (36) NULL," +
+                                                      "[ShipmentIdentifier] [nvarchar] (36) NULL," +
+                                                      "[IsEmpty] [bit] NOT NULL," +
+                                                      "[Name] [nvarchar] (max) NULL," +
+                                                      "[PalletIdentifier] [nvarchar] (36) NULL," +
+                                                      "[ProductId] [uniqueidentifier] NULL," +
+                                                      "[RecipientCompanyId] [uniqueidentifier] NULL," +
+                                                      "[Status] [int] NOT NULL," +
+                                                      "[UpdateDateUtc] [datetime2] (7) NOT NULL," +
+                                                      "[ProductionLineId] [uniqueidentifier] NULL," +
+                                                      "[StorageId] [uniqueidentifier] NULL," +
+                                                      "[WorkplaceId] [int] NULL," +
+                                                      "[PartNumber] [nvarchar] (max) NULL);";
+
+                        return createSqlQuery;
+                    }
+                case TmpBatchTableAction.TransferDataAndDrop:
+                    {
+                        const string transferDataWithShipmentsSqlQuery =
+                            "INSERT INTO Batches(Id, Identifier, Name, Comment, Status, CreateDateUtc, UpdateDateUtc, IsEmpty, PalletIdentifier, PartNumber, CompanyId, DeviceId, RecipientCompanyId, ShipmentId, ProductId, ProductionLineId, StorageId, WorkplaceId) " +
+                            "SELECT b.Id, b.Identifier, b.Name, b.Comment, b.Status, b.CreateDateUtc, b.UpdateDateUtc, b.IsEmpty, b.PalletIdentifier, b.PartNumber, b.CompanyId, b.DeviceId, b.RecipientCompanyId, s.Id, b.ProductId, b.ProductionLineId, b.StorageId, b.WorkplaceId " +
+                            "FROM TmpBatches b INNER JOIN Shipments s ON b.ShipmentIdentifier = s.Identifier WHERE ShipmentIdentifier <> '';";
+
+                        const string transferDataWithoutShipmentsSqlQuery =
+                            "INSERT INTO Batches(Id, Identifier, Name, Comment, Status, CreateDateUtc, UpdateDateUtc, IsEmpty, PalletIdentifier, PartNumber, CompanyId, DeviceId, RecipientCompanyId, ProductId, ProductionLineId, StorageId, WorkplaceId) " +
+                            "SELECT Id, Identifier, Name, Comment, Status, CreateDateUtc, UpdateDateUtc, IsEmpty, PalletIdentifier, PartNumber, CompanyId, DeviceId, RecipientCompanyId, ProductId, ProductionLineId, StorageId, WorkplaceId FROM TmpBatches " +
+                            "WHERE ShipmentIdentifier IS NULL OR ShipmentIdentifier = '';";
+
+                        const string dropSqlQuery = "DROP TABLE TmpBatches;";
+
+                        return transferDataWithShipmentsSqlQuery + transferDataWithoutShipmentsSqlQuery + dropSqlQuery;
+                    }
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(action), action, null);
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using DataImport.Entities;
+using DataImport.Entities.Enums;
 using DataImport.Extensions;
 
 namespace DataImport
@@ -32,7 +33,9 @@ namespace DataImport
                             sql = ((IEnumerable<Bottle>)data).CreateSqlQuery();
                             break;
                         case Type batchType when batchType == typeof(Batch):
-                            sql = ((IEnumerable<Batch>)data).CreateSqlQuery();
+                            sql = TmpBatchTableAction.Create.AffectOnTmpBatchTableSqlQuery() +
+                                  ((IEnumerable<Batch>)data).CreateSqlQuery() +
+                                  TmpBatchTableAction.TransferDataAndDrop.AffectOnTmpBatchTableSqlQuery();
                             break;
                         case Type palletType when palletType == typeof(Pallet):
                             sql = ((IEnumerable<Pallet>)data).CreateSqlQuery();
