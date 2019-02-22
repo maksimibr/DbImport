@@ -27,7 +27,7 @@ namespace DataImport
                 return;
             }
 
-            var currentFolder = Directory.GetParent(Directory.GetCurrentDirectory())?.Parent?.Parent?.Parent?.FullName;
+            var currentFolder = Directory.GetCurrentDirectory();
             if (string.IsNullOrEmpty(currentFolder))
             {
                 Console.WriteLine("Error! Could not get current path");
