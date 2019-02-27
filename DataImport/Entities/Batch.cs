@@ -5,7 +5,7 @@ namespace DataImport.Entities
 {
     public class Batch
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         public string Identifier { get; set; }
 
@@ -25,19 +25,19 @@ namespace DataImport.Entities
 
         public string PartNumber { get; set; }
 
-        public Guid CompanyId { get; set; }
+        public string CompanyId { get; set; }
 
-        public Guid? DeviceId { get; set; }
+        public string DeviceId { get; set; }
 
-        public Guid? RecipientCompanyId { get; set; }
+        public string RecipientCompanyId { get; set; }
 
         public string ShipmentIdentifier { get; set; }
 
-        public Guid? ProductId { get; set; }
+        public string ProductId { get; set; }
 
-        public Guid? ProductionLineId { get; set; }
+        public string ProductionLineId { get; set; }
 
-        public Guid? StorageId { get; set; }
+        public string StorageId { get; set; }
 
         public int? WorkplaceId { get; set; }
     }

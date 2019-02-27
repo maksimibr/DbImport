@@ -4,7 +4,7 @@ namespace DataImport.Entities
 {
     public class Shipment
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         public string Identifier { get; set; }
 
@@ -18,16 +18,16 @@ namespace DataImport.Entities
 
         public string Comment { get; set; }
 
-        public Guid? DeviceId { get; set; }
+        public string DeviceId { get; set; }
 
         public DateTime CreateDateUtc { get; set; }
 
         public DateTime UpdateDateUtc { get; set; }
 
-        public Guid CompanyId { get; set; }
+        public string CompanyId { get; set; }
 
-        public Guid? RecipientCompanyId { get; set; }
+        public string RecipientCompanyId { get; set; }
 
-        public Guid StorageId { get; set; }
+        public string StorageId { get; set; }
     }
 }

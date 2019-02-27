@@ -5,7 +5,7 @@ namespace DataImport.Entities
 {
     public class Bottle
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         public string Identifier { get; set; }
 
@@ -19,16 +19,16 @@ namespace DataImport.Entities
 
         public DateTime UpdateDateUtc { get; set; }
 
-        public Guid CompanyId { get; set; }
+        public string CompanyId { get; set; }
 
-        public Guid? RecipientCompanyId { get; set; }
+        public string RecipientCompanyId { get; set; }
 
         public string BatchIdentifier { get; set; }
 
-        public Guid? ProductionLineId { get; set; }
+        public string ProductionLineId { get; set; }
 
-        public Guid? BatchId { get; set; }
+        public string BatchId { get; set; }
 
-        public Guid? ProductId { get; set; }
+        public string ProductId { get; set; }
     }
 }
