@@ -5,7 +5,7 @@ namespace DataImport.Entities
 {
     public class Pallet
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         public string Identifier { get; set; }
 
@@ -19,18 +19,18 @@ namespace DataImport.Entities
 
         public Status Status { get; set; }
 
-        public string DeviceId { get; set; }
+        public Guid? DeviceId { get; set; }
 
-        public string ShipmentId { get; set; }
+        public Guid? ProductionLineId { get; set; }
 
-        public string ProductionLineId { get; set; }
+        public Guid? StorageId { get; set; }
 
-        public string StorageId { get; set; }
-
-        public string ProductId { get; set; }
+        public Guid? ProductId { get; set; }
 
         public int? WorkplaceId { get; set; }
 
         public string PartNumber { get; set; }
+
+        public string ShipmentIdentifier { get; set; }
     }
 }

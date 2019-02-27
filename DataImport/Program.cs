@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using DataImport.Entities;
+using DataImport.Entities.Enums;
 using DataImport.Maps;
 using Microsoft.Extensions.Configuration;
 
@@ -9,7 +10,7 @@ namespace DataImport
 {
     internal class Program
     {
-        internal static IConfigurationRoot Configuration { get; private set; }
+        internal static IConfiguration Configuration { get; private set; }
 
         private static void Main()
         {
@@ -35,7 +36,16 @@ namespace DataImport
                 return;
             }
 
-            var dataWriter = new DataWriter(connectionString);
+            if (!Enum.TryParse(Configuration["DatabaseType"], out DatabaseType databaseType))
+            {
+                Console.WriteLine("Invalid database type");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.WriteLine($"ConnectionString: {connectionString}\nDatabaseType: {databaseType.ToString()}");
+
+            var dataWriter = new DataWriter(connectionString, databaseType);
 
             var shipmentCsvPath = Path.Combine(currentFolder, "shipments.csv");
             if (File.Exists(shipmentCsvPath))
