@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using DataImport.Entities;
+using DataImport.Entities.Enums;
 using DataImport.Maps;
 using Microsoft.Extensions.Configuration;
 
@@ -9,7 +10,7 @@ namespace DataImport
 {
     internal class Program
     {
-        internal static IConfigurationRoot Configuration { get; private set; }
+        internal static IConfiguration Configuration { get; private set; }
 
         private static void Main()
         {
@@ -35,7 +36,10 @@ namespace DataImport
                 return;
             }
 
-            var dataWriter = new DataWriter(connectionString);
+            var databaseType = Enum.Parse<DatabaseType>(Configuration["DatabaseType"]);
+            Console.WriteLine($"ConnectionString: {connectionString}\nDatabaseType: {databaseType.ToString()}");
+
+            var dataWriter = new DataWriter(connectionString, databaseType);
 
             var shipmentCsvPath = Path.Combine(currentFolder, "shipments.csv");
             if (File.Exists(shipmentCsvPath))
@@ -109,6 +113,8 @@ namespace DataImport
                 Console.ReadKey();
                 return;
             }
+
+            return;
 
             var bottleCsvPath = Path.Combine(currentFolder, "bottles.csv");
             if (File.Exists(bottleCsvPath))
