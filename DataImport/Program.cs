@@ -36,7 +36,13 @@ namespace DataImport
                 return;
             }
 
-            var databaseType = Enum.Parse<DatabaseType>(Configuration["DatabaseType"]);
+            if (!Enum.TryParse(Configuration["DatabaseType"], out DatabaseType databaseType))
+            {
+                Console.WriteLine("Invalid database type");
+                Console.ReadKey();
+                return;
+            }
+
             Console.WriteLine($"ConnectionString: {connectionString}\nDatabaseType: {databaseType.ToString()}");
 
             var dataWriter = new DataWriter(connectionString, databaseType);
@@ -113,8 +119,6 @@ namespace DataImport
                 Console.ReadKey();
                 return;
             }
-
-            return;
 
             var bottleCsvPath = Path.Combine(currentFolder, "bottles.csv");
             if (File.Exists(bottleCsvPath))

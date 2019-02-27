@@ -84,6 +84,10 @@ namespace DataImport
                     when bottleType == typeof(Bottle) && DatabaseType == DatabaseType.SqlServer:
                     sql = ((IEnumerable<Bottle>)data).CreateSqlServerSqlQuery();
                     break;
+                case Type bottleType
+                    when bottleType == typeof(Bottle) && DatabaseType == DatabaseType.PostgreSql:
+                    sql = ((IEnumerable<Bottle>)data).CreatePostgreSqlSqlQuery();
+                    break;
                 case Type batchType
                     when batchType == typeof(Batch) && DatabaseType == DatabaseType.SqlServer:
                     sql = TmpBatchTableAction.Create.AffectOnSqlServerTmpBatchTableSqlQuery() +

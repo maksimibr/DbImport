@@ -44,6 +44,20 @@ namespace DataImport.Extensions
             return sql;
         }
 
+        internal static string CreatePostgreSqlSqlQuery(this IEnumerable<Bottle> bottles)
+        {
+            var sqlInsert = bottles.Aggregate(
+                                    "INSERT INTO public.\"Bottles\"(\"Id\", \"Identifier\", \"ExciseDutyNumber\", \"ExciseDutyNumber2\", \"Status\", \"CreateDateUtc\", \"UpdateDateUtc\", \"CompanyId\", \"RecipientCompanyId\", \"BatchIdentifier\", \"ProductionLineId\", \"BatchId\", \"ProductId\") VALUES",
+                                    (current, bottle) =>
+                                        current +
+                                        $"({bottle.Id.GetValue()}, {bottle.Identifier.GetValue()}, {bottle.ExciseDutyNumber.GetValue()}, {bottle.ExciseDutyNumber2.GetValue()}, {bottle.Status.GetValue()}, {bottle.CreateDateUtc.GetValue()}, {bottle.UpdateDateUtc.GetValue()}, {bottle.CompanyId.GetValue()}, {bottle.RecipientCompanyId.GetValue()}, {bottle.BatchIdentifier.GetValue()}, {bottle.ProductionLineId.GetValue()}, {bottle.BatchId.GetValue()}, {bottle.ProductId.GetValue()}),")
+                                .RemoveLast() + ";";
+
+            const string sqlUpdate = "UPDATE public.\"Bottles\" SET \"BatchIdentifier\" = (SELECT \"Identifier\" FROM public.\"Batches\" WHERE public.\"Bottles\".\"BatchId\" = public.\"Batches\".\"Id\" LIMIT 1);";
+
+            return sqlInsert + sqlUpdate;
+        }
+
         internal static string AffectOnPostgreSqlTmpBatchTableSqlQuery(this TmpBatchTableAction action)
         {
             switch (action)
@@ -84,7 +98,7 @@ namespace DataImport.Extensions
                             "SELECT \"Id\", \"Identifier\", \"Name\", \"Comment\", \"Status\", \"CreateDateUtc\", \"UpdateDateUtc\", \"IsEmpty\", \"PalletIdentifier\", \"PartNumber\", \"CompanyId\", \"DeviceId\", \"RecipientCompanyId\", \"ProductId\", \"ProductionLineId\", \"StorageId\", \"WorkplaceId\" FROM public.\"TmpBatches\" " +
                             "WHERE \"ShipmentIdentifier\" IS NULL;";
 
-                        const string dropSqlQuery = "DROP TABLE public.\"TmpBatches;\"";
+                        const string dropSqlQuery = "DROP TABLE public.\"TmpBatches\";";
 
                         return transferDataWithShipmentsSqlQuery + transferDataWithoutShipmentsSqlQuery + dropSqlQuery;
                     }
