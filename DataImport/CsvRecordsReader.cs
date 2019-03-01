@@ -15,6 +15,7 @@ namespace DataImport
             using (var reader = new StreamReader(path))
             using (var csv = new CsvReader(reader))
             {
+                csv.Configuration.HeaderValidated = null;
                 csv.Configuration.RegisterClassMap<TMap>();
                 using (var recordsEnumerator = csv.GetRecords<T>().GetEnumerator())
                 {
