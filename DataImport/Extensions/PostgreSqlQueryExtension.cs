@@ -8,6 +8,32 @@ namespace DataImport.Extensions
 {
     internal static class PostgreSqlQueryExtension
     {
+        internal static string DisableAllPostgreTablesIndexesSqlQuery()
+        {
+            const string sql =
+                "UPDATE pg_index SET indisready=false WHERE indrelid = (SELECT oid FROM pg_class WHERE relname='Bottles');" +
+                "UPDATE pg_index SET indisready=false WHERE indrelid = (SELECT oid FROM pg_class WHERE relname='Batches');" +
+                "UPDATE pg_index SET indisready=false WHERE indrelid = (SELECT oid FROM pg_class WHERE relname='Pallets');" +
+                "UPDATE pg_index SET indisready=false WHERE indrelid = (SELECT oid FROM pg_class WHERE relname='Shipments');";
+
+            return sql;
+        }
+
+        internal static string ReenableAllPostgreTablesIndexesSqlQuery()
+        {
+            const string sql =
+                "UPDATE pg_index SET indisready=true WHERE indrelid = (SELECT oid FROM pg_class WHERE relname='Bottles');" +
+                "UPDATE pg_index SET indisready=true WHERE indrelid = (SELECT oid FROM pg_class WHERE relname='Batches');" +
+                "UPDATE pg_index SET indisready=true WHERE indrelid = (SELECT oid FROM pg_class WHERE relname='Pallets');" +
+                "UPDATE pg_index SET indisready=true WHERE indrelid = (SELECT oid FROM pg_class WHERE relname='Shipments');" +
+                "REINDEX TABLE public.\"Bottles\";" +
+                "REINDEX TABLE public.\"Batches\";" +
+                "REINDEX TABLE public.\"Pallets\";" +
+                "REINDEX TABLE public.\"Shipments\";";
+
+            return sql;
+        }
+
         internal static string CreatePostgreSqlSqlQuery(this IEnumerable<Shipment> shipments)
         {
             var sql = shipments.Aggregate(

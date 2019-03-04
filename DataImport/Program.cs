@@ -46,6 +46,8 @@ namespace DataImport
 
             var dataWriter = new DataWriter(connectionString, databaseType);
 
+            dataWriter.DisableAllTablesIndexes();
+
             var shipmentCsvPath = Path.Combine(currentFolder, "shipments.csv");
             if (File.Exists(shipmentCsvPath))
             {
@@ -67,7 +69,7 @@ namespace DataImport
                         Console.Write(shipmentCount);
                     }
 
-                    Console.WriteLine("\n\n#--------------------Shipments end--------------------#\n\n");
+                    Console.WriteLine("\n\n#-----------------------Shipments end-----------------------#\n\n");
                 }
             }
             else
@@ -98,7 +100,7 @@ namespace DataImport
                         Console.Write(paletsCount);
                     }
 
-                    Console.WriteLine("\n\n#--------------------Palets end--------------------#\n\n");
+                    Console.WriteLine("\n\n#-----------------------Palets end-----------------------#\n\n");
                 }
             }
             else
@@ -129,7 +131,7 @@ namespace DataImport
                         Console.Write(batchesCount);
                     }
 
-                    Console.WriteLine("\n\n#--------------------Batches end--------------------#\n\n");
+                    Console.WriteLine("\n\n#-----------------------Batches end-----------------------#\n\n");
                 }
             }
             else
@@ -160,7 +162,7 @@ namespace DataImport
                         Console.Write(bottlesCount);
                     }
 
-                    Console.WriteLine("\n\n#--------------------Bottles end--------------------#\n\n");
+                    Console.WriteLine("\n\n#-----------------------Bottles end-----------------------#\n\n");
                 }
             }
             else
@@ -169,6 +171,8 @@ namespace DataImport
                 Console.ReadKey();
                 return;
             }
+
+            dataWriter.ReenableAllTablesIndexes();
 
             Console.WriteLine("Ok");
             Console.ReadKey();

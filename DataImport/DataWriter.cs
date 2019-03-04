@@ -19,10 +19,44 @@ namespace DataImport
             DatabaseType = databaseType;
         }
 
+        internal void DisableAllTablesIndexes()
+        {
+            var sql = string.Empty;
+            switch (DatabaseType)
+            {
+                case DatabaseType.SqlServer:
+                    return;
+                case DatabaseType.PostgreSql:
+                    sql = PostgreSqlQueryExtension.DisableAllPostgreTablesIndexesSqlQuery();
+                    break;
+            }
+
+            ExecuteNonQuery(sql);
+        }
+
+        internal void ReenableAllTablesIndexes()
+        {
+            var sql = string.Empty;
+            switch (DatabaseType)
+            {
+                case DatabaseType.SqlServer:
+                    return;
+                case DatabaseType.PostgreSql:
+                    sql = PostgreSqlQueryExtension.ReenableAllPostgreTablesIndexesSqlQuery();
+                    break;
+            }
+
+            ExecuteNonQuery(sql);
+        }
+
         internal void Insert<T>(ICollection<T> data)
         {
             var sql = CtrateSqlQuery(data);
+            ExecuteNonQuery(sql);
+        }
 
+        private void ExecuteNonQuery(string sql)
+        {
             switch (DatabaseType)
             {
                 case DatabaseType.SqlServer:
@@ -41,10 +75,10 @@ namespace DataImport
                                 }
                                 catch (Exception e)
                                 {
-                                    transaction.Rollback();
                                     Console.WriteLine("\n\n#--------Exception beginning--------#");
                                     Console.WriteLine(e.Message);
                                     Console.WriteLine("#--------Exception end--------#\n");
+                                    transaction.Rollback();
                                 }
                             }
                         }
@@ -67,10 +101,10 @@ namespace DataImport
                                 }
                                 catch (Exception e)
                                 {
-                                    transaction.Rollback();
                                     Console.WriteLine("\n\n#--------Exception beginning--------#");
                                     Console.WriteLine(e.Message);
                                     Console.WriteLine("#--------Exception end--------#\n");
+                                    transaction.Rollback();
                                 }
                             }
                         }
