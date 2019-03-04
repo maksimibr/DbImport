@@ -90,22 +90,25 @@ namespace DataImport
                         using (var connection = new NpgsqlConnection(ConnectionString))
                         {
                             connection.Open();
-                            using (var transaction = connection.BeginTransaction())
-                            {
-                                try
-                                {
-                                    var command = new NpgsqlCommand(sql, connection, transaction);
-                                    command.ExecuteNonQuery();
+                            var transaction = connection.BeginTransaction();
 
-                                    transaction.Commit();
-                                }
-                                catch (Exception e)
-                                {
-                                    Console.WriteLine("\n\n#--------Exception beginning--------#");
-                                    Console.WriteLine(e.Message);
-                                    Console.WriteLine("#--------Exception end--------#\n");
-                                    transaction.Rollback();
-                                }
+                            try
+                            {
+                                var command = new NpgsqlCommand(sql, connection, transaction);
+                                command.ExecuteNonQuery();
+
+                                transaction.Commit();
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine("\n\n#--------Exception beginning--------#");
+                                Console.WriteLine(e.Message);
+                                Console.WriteLine("#--------Exception end--------#\n");
+                                transaction.Rollback();
+                            }
+                            finally
+                            {
+                                transaction.Dispose();
                             }
                         }
 

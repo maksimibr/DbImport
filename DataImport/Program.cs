@@ -46,8 +46,6 @@ namespace DataImport
 
             var dataWriter = new DataWriter(connectionString, databaseType);
 
-            dataWriter.DisableAllTablesIndexes();
-
             var shipmentCsvPath = Path.Combine(currentFolder, "shipments.csv");
             if (File.Exists(shipmentCsvPath))
             {
@@ -59,6 +57,7 @@ namespace DataImport
                     var shipmentCount = 0;
                     Console.Write(shipmentCount);
 
+                    dataWriter.DisableAllTablesIndexes();
                     while (shipmentEnumerator.MoveNext())
                     {
                         var segment = shipmentEnumerator.Current;
@@ -68,6 +67,8 @@ namespace DataImport
                         ClearCurrentConsoleLine();
                         Console.Write(shipmentCount);
                     }
+
+                    dataWriter.ReenableAllTablesIndexes();
 
                     Console.WriteLine("\n\n#-----------------------Shipments end-----------------------#\n\n");
                 }
@@ -90,6 +91,7 @@ namespace DataImport
                     var paletsCount = 0;
                     Console.Write(paletsCount);
 
+                    dataWriter.DisableAllTablesIndexes();
                     while (palletEnumerator.MoveNext())
                     {
                         var segment = palletEnumerator.Current;
@@ -99,6 +101,8 @@ namespace DataImport
                         ClearCurrentConsoleLine();
                         Console.Write(paletsCount);
                     }
+
+                    dataWriter.ReenableAllTablesIndexes();
 
                     Console.WriteLine("\n\n#-----------------------Palets end-----------------------#\n\n");
                 }
@@ -121,6 +125,7 @@ namespace DataImport
                     var batchesCount = 0;
                     Console.Write(batchesCount);
 
+                    dataWriter.DisableAllTablesIndexes();
                     while (batchEnumerator.MoveNext())
                     {
                         var segment = batchEnumerator.Current;
@@ -130,6 +135,8 @@ namespace DataImport
                         ClearCurrentConsoleLine();
                         Console.Write(batchesCount);
                     }
+
+                    dataWriter.ReenableAllTablesIndexes();
 
                     Console.WriteLine("\n\n#-----------------------Batches end-----------------------#\n\n");
                 }
@@ -152,6 +159,7 @@ namespace DataImport
                     var bottlesCount = 0;
                     Console.Write(bottlesCount);
 
+                    dataWriter.DisableAllTablesIndexes();
                     while (bottleEnumerator.MoveNext())
                     {
                         var segment = bottleEnumerator.Current;
@@ -162,6 +170,8 @@ namespace DataImport
                         Console.Write(bottlesCount);
                     }
 
+                    dataWriter.ReenableAllTablesIndexes();
+
                     Console.WriteLine("\n\n#-----------------------Bottles end-----------------------#\n\n");
                 }
             }
@@ -171,8 +181,6 @@ namespace DataImport
                 Console.ReadKey();
                 return;
             }
-
-            dataWriter.ReenableAllTablesIndexes();
 
             Console.WriteLine("Ok");
             Console.ReadKey();
