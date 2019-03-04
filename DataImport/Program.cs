@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Threading.Tasks;
 using DataImport.Entities;
 using DataImport.Entities.Enums;
 using DataImport.Maps;
@@ -53,15 +52,22 @@ namespace DataImport
                 var shipmentRecords = CsvRecordsReader.Read<Shipment, ShipmentMap>(shipmentCsvPath);
                 using (var shipmentEnumerator = shipmentRecords.GetEnumerator())
                 {
-                    Console.WriteLine("\n#-----------------#");
-                    Console.WriteLine("Shipments..");
-                    Console.WriteLine("#-----------------#\n");
+                    Console.WriteLine("\n\n#--------------------Shipments beginning--------------------#\n");
+
+                    var shipmentCount = 0;
+                    Console.Write(shipmentCount);
+
                     while (shipmentEnumerator.MoveNext())
                     {
                         var segment = shipmentEnumerator.Current;
-                        Task.Run(async () =>
-                            await dataWriter.InsertAsync(segment).ConfigureAwait(true)).Wait();
+                        dataWriter.Insert(segment);
+
+                        shipmentCount += segment.Count;
+                        ClearCurrentConsoleLine();
+                        Console.Write(shipmentCount);
                     }
+
+                    Console.WriteLine("\n\n#--------------------Shipments end--------------------#\n\n");
                 }
             }
             else
@@ -77,16 +83,22 @@ namespace DataImport
                 var palletRecords = CsvRecordsReader.Read<Pallet, PalletMap>(palletCsvPath);
                 using (var palletEnumerator = palletRecords.GetEnumerator())
                 {
-                    Console.WriteLine("\n#-----------------#");
-                    Console.WriteLine("Palets..");
-                    Console.WriteLine("#-----------------#\n");
+                    Console.WriteLine("\n\n#--------------------Palets beginning--------------------#\n");
+
+                    var paletsCount = 0;
+                    Console.Write(paletsCount);
 
                     while (palletEnumerator.MoveNext())
                     {
                         var segment = palletEnumerator.Current;
-                        Task.Run(async () =>
-                            await dataWriter.InsertAsync(segment).ConfigureAwait(true)).Wait();
+                        dataWriter.Insert(segment);
+
+                        paletsCount += segment.Count;
+                        ClearCurrentConsoleLine();
+                        Console.Write(paletsCount);
                     }
+
+                    Console.WriteLine("\n\n#--------------------Palets end--------------------#\n\n");
                 }
             }
             else
@@ -102,15 +114,22 @@ namespace DataImport
                 var batchRecords = CsvRecordsReader.Read<Batch, BatchMap>(batchCsvPath);
                 using (var batchEnumerator = batchRecords.GetEnumerator())
                 {
-                    Console.WriteLine("\n#-----------------#");
-                    Console.WriteLine("Batches..");
-                    Console.WriteLine("#-----------------#\n");
+                    Console.WriteLine("\n\n#--------------------Batches beginning--------------------#\n");
+
+                    var batchesCount = 0;
+                    Console.Write(batchesCount);
 
                     while (batchEnumerator.MoveNext())
                     {
                         var segment = batchEnumerator.Current;
-                        Task.Run(async () => await dataWriter.InsertAsync(segment).ConfigureAwait(true)).Wait();
+                        dataWriter.Insert(segment);
+
+                        batchesCount += segment.Count;
+                        ClearCurrentConsoleLine();
+                        Console.Write(batchesCount);
                     }
+
+                    Console.WriteLine("\n\n#--------------------Batches end--------------------#\n\n");
                 }
             }
             else
@@ -126,15 +145,22 @@ namespace DataImport
                 var bottlesRecords = CsvRecordsReader.Read<Bottle, BottleMap>(bottleCsvPath);
                 using (var bottleEnumerator = bottlesRecords.GetEnumerator())
                 {
-                    Console.WriteLine("\n#-----------------#");
-                    Console.WriteLine("Bottles..");
-                    Console.WriteLine("#-----------------#\n");
+                    Console.WriteLine("\n\n#--------------------Bottles beginning--------------------#\n");
+
+                    var bottlesCount = 0;
+                    Console.Write(bottlesCount);
+
                     while (bottleEnumerator.MoveNext())
                     {
                         var segment = bottleEnumerator.Current;
-                        Task.Run(async () =>
-                            await dataWriter.InsertAsync(segment).ConfigureAwait(true)).Wait();
+                        dataWriter.Insert(segment);
+
+                        bottlesCount += segment.Count;
+                        ClearCurrentConsoleLine();
+                        Console.Write(bottlesCount);
                     }
+
+                    Console.WriteLine("\n\n#--------------------Bottles end--------------------#\n\n");
                 }
             }
             else
@@ -146,6 +172,14 @@ namespace DataImport
 
             Console.WriteLine("Ok");
             Console.ReadKey();
+        }
+
+        private static void ClearCurrentConsoleLine()
+        {
+            var currentLineCursor = Console.CursorTop;
+            Console.SetCursorPosition(0, Console.CursorTop);
+            Console.Write(new string(' ', Console.WindowWidth));
+            Console.SetCursorPosition(0, currentLineCursor);
         }
     }
 }

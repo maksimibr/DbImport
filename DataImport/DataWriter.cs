@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Threading.Tasks;
 using DataImport.Entities;
 using DataImport.Entities.Enums;
 using DataImport.Extensions;
@@ -20,7 +19,7 @@ namespace DataImport
             DatabaseType = databaseType;
         }
 
-        internal async Task InsertAsync<T>(ICollection<T> data)
+        internal void Insert<T>(ICollection<T> data)
         {
             var sql = CtrateSqlQuery(data);
 
@@ -30,20 +29,23 @@ namespace DataImport
                     {
                         using (var connection = new SqlConnection(ConnectionString))
                         {
-                            await connection.OpenAsync().ConfigureAwait(false);
-                            var transaction = connection.BeginTransaction();
-
-                            try
+                            connection.Open();
+                            using (var transaction = connection.BeginTransaction())
                             {
-                                var command = new SqlCommand(sql, connection, transaction);
-                                await command.ExecuteNonQueryAsync().ConfigureAwait(false);
+                                try
+                                {
+                                    var command = new SqlCommand(sql, connection, transaction);
+                                    command.ExecuteNonQuery();
 
-                                transaction.Commit();
-                            }
-                            catch (Exception e)
-                            {
-                                transaction.Rollback();
-                                Console.WriteLine(e.Message);
+                                    transaction.Commit();
+                                }
+                                catch (Exception e)
+                                {
+                                    transaction.Rollback();
+                                    Console.WriteLine("\n\n#--------Exception beginning--------#");
+                                    Console.WriteLine(e.Message);
+                                    Console.WriteLine("#--------Exception end--------#\n");
+                                }
                             }
                         }
 
@@ -53,20 +55,23 @@ namespace DataImport
                     {
                         using (var connection = new NpgsqlConnection(ConnectionString))
                         {
-                            await connection.OpenAsync().ConfigureAwait(false);
-                            var transaction = connection.BeginTransaction();
-
-                            try
+                            connection.Open();
+                            using (var transaction = connection.BeginTransaction())
                             {
-                                var command = new NpgsqlCommand(sql, connection, transaction);
-                                await command.ExecuteNonQueryAsync().ConfigureAwait(false);
+                                try
+                                {
+                                    var command = new NpgsqlCommand(sql, connection, transaction);
+                                    command.ExecuteNonQuery();
 
-                                transaction.Commit();
-                            }
-                            catch (Exception e)
-                            {
-                                transaction.Rollback();
-                                Console.WriteLine(e.Message);
+                                    transaction.Commit();
+                                }
+                                catch (Exception e)
+                                {
+                                    transaction.Rollback();
+                                    Console.WriteLine("\n\n#--------Exception beginning--------#");
+                                    Console.WriteLine(e.Message);
+                                    Console.WriteLine("#--------Exception end--------#\n");
+                                }
                             }
                         }
 
@@ -122,7 +127,6 @@ namespace DataImport
                     break;
             }
 
-            Console.WriteLine($"{sql}\n");
             return sql;
         }
     }
